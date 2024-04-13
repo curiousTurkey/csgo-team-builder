@@ -70,6 +70,10 @@ body{
     border-color: #2c0f0cff;
     border-width: .1em;
     margin: 0 1em 0 1em;
+    
+}
+input{
+    color: #000;
 }
 .active{
     transform: scale3d(1.2,1.2,1.2);

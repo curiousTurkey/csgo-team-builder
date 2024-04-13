@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSGO: Team Builder</title>
     <link rel="shortcut icon" href="assets/Images/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="stylesheet/main.css">
+    <link rel="stylesheet" href="stylesheet/weapon-select.css">
 </head>
-<body>
-    <div>
+<body onload="">
+    <div class="heading" id="heading">Choose Weapons: Counter Terrorist</div>
+    <div class="weapon-screen" id="weaponScreen">
+        <div class="weapon-category">Gloves</div>
+        <div class="weapon-category">Knives</div>
+        <div class="weapon-category">Pistols</div>
+        <div class="weapon-category">SMGs</div>
+        <div class="weapon-category">Rifles</div>
+        <div class="weapon-category">Heavy</div>
+    </div>
+    <div id="weaponClass" class="weapon-class"></div>
+    <div id="weaponContainer" class="weapon-container"></div>
+    <div class="advance-button">
+        <button onclick="" id="nextButton">Select and Advance</button>
     </div>
     <!-- scripts -->
     <script src="script/sounds.js"></script>

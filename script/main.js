@@ -5,8 +5,12 @@ const WEAPONS_URL = "https://bymykel.github.io/CSGO-API/api/en/skins.json";
 //array to store api data
 let agentArray = [];
 // let weaponsArray = [];
-let counterTerroristWeapons = [];
-let terroristsWeapons = [];
+let pistolsArray = [];
+let riflesArray = [];
+let heavyArray = [];
+let smgArray = [];
+let knivesArray = [];
+let glovesArray = [];
 //function to fetch api to call api and set data.
 function apiFetch(url, callbackfunction) {
     let xhr = new XMLHttpRequest();
@@ -51,49 +55,45 @@ apiFetch(WEAPONS_URL, (response) => {
                                 min = 200;
                                 max = 700;
                                 tempArray[i].price = getRandomNumber(min, max);
+                                pistolsArray.push(tempArray[i]);
                             }
                             if(tempArray[i].category.name === 'Rifles'){
                                 min = 1500;
                                 max = 3500;
                                 tempArray[i].price = getRandomNumber(min,max);
+                                riflesArray.push(tempArray[i]);
                             }
                             if(tempArray[i].category.name === 'Heavy'){
                                 min = 2500;
                                 max = 4500;
                                 tempArray[i].price = getRandomNumber(min,max);
+                                heavyArray.push(tempArray[i]);
                             }
                             if(tempArray[i].category.name === 'SMGs'){
                                 min = 1000;
                                 max = 1500;
                                 tempArray[i].price = getRandomNumber(min,max);
+                                smgArray.push(tempArray[i]);
                             }
                             if(tempArray[i].category.name === 'Knives'){
                                 min = 100;
                                 max = 500;
                                 tempArray[i].price = getRandomNumber(min,max);
+                                knivesArray.push(tempArray[i]);
                             }
                             if(tempArray[i].category.name === 'Gloves'){
                                 min = 100;
                                 max = 500;
                                 tempArray[i].price = getRandomNumber(min,max);
+                                glovesArray.push(tempArray[i]);
                             }
-                            if (tempArray[i].team.id === 'both') {
-                                counterTerroristWeapons.push(tempArray[i]);
-                                terroristsWeapons.push(tempArray[i]);
-                            }
-                            else if (tempArray[i].team.id === 'counter-terrorists') {
-                                counterTerroristWeapons.push(tempArray[i]);
-                            } else if (tempArray[i].team.id === 'terrorists') {
-                                terroristsWeapons.push(tempArray[i]);
-                            }
-
                         } else {
                             continue;
                         }
     }
     tempArray = [];
-    console.log(terroristsWeapons);
-    console.log(counterTerroristWeapons);
+    console.log(glovesArray);
+    // console.log(weaponArray);
 });
 //function to call selected team
 function selectedTeam(teamName) {
@@ -214,12 +214,128 @@ function goToWeaponSelection() {
 //to sort and display weapons
 //heavy,rifle,smg,pistols,knife,gloves
 //category.name, 
+//add event listeners to all categories
+document.querySelectorAll(".weapon-category").forEach((item) => {
+    item.addEventListener("click",()=>{
+        playClickAudio();
+        console.log(item.innerText);
+        if(item.innerText === "Gloves"){
+            insertWeaponCategories(glovesArray);
+        }else if(item.innerText === "Knives"){
+            insertWeaponCategories(knivesArray);
+        }else if(item.innerText === "Pistols"){
+            insertWeaponCategories(pistolsArray);
+        }else if(item.innerText === "SMGs"){
+            insertWeaponCategories(smgArray);
+        }else if(item.innerText === "Rifles"){
+            insertWeaponCategories(riflesArray);
+        }else if(item.innerText === "Heavy"){
+            insertWeaponCategories(heavyArray);
+        }
+    })
+});
 
-//display weapons to respective category
-function showWeaponsToCategory() {
-
+//function to get unique array
+function removeduplicates(arr) {
+    let outputArray = Array.from(new Set(arr))
+    return outputArray
 }
+//function to get unique category array
+function getCategory(weaponTypeArray){
+    let tempArray = [];
+    for(let i = 0; i < weaponTypeArray.length; i++){
+    tempArray.push(weaponTypeArray[i].weapon.name);
+    }
+    uniqueArray = removeduplicates(tempArray);
+    console.log(uniqueArray);
+    return uniqueArray;
+}
+//function to display weapon categories
+function insertWeaponCategories(weaponTypeArray){
+    let categoryContainer = document.getElementById("weaponClass");
+    categoryContainer.innerHTML = "";
+    let uniqueArray = getCategory(weaponTypeArray);
+    console.log(uniqueArray);
+    for(let i = 0; i < uniqueArray.length; i++){
+        let categoryTile = document.createElement("div");
+        categoryTile.classList = "category-tile";
+        let categoryName = document.createElement("p");
+        categoryName.classList = "category-name";
+        categoryName.innerText = uniqueArray[i];
+        categoryTile.appendChild(categoryName);
+        categoryContainer.appendChild(categoryTile);
+    }
+    //event listener to play audio and call functions
+document.querySelectorAll(".category-tile").forEach((item)=>{
+    item.addEventListener("click",()=>{
+        document.getElementById("weaponContainer").innerHTML = "";
+        playClickAudio();
+        for(let i=0; i< weaponTypeArray.length; i++){
+        if(item.innerText === weaponTypeArray[i].weapon.name){
+            displayWeapons(weaponTypeArray[i]);
+        }
+        }
+    });
+});
+} 
 
+
+
+//function to display weapons according to category
+function displayWeapons(weaponArray){
+    let weaponContainer = document.getElementById("weaponContainer");
+    let selectedTeam = localStorage.getItem("selected-team");
+    console.log(selectedTeam);
+    if(selectedTeam === "counter-terrorists"){  
+         let weaponTile = document.createElement("div");
+         weaponTile.classList = "weapons";
+         let weaponImage = document.createElement("img");
+         weaponImage.src = weaponArray.image;
+         weaponImage.classList = "weapon-image";
+         weaponTile.appendChild(weaponImage);
+         let weaponName = document.createElement("p");
+         weaponName.classList = "weapon-name";
+         weaponName.innerText = weaponArray.weapon.name;
+         weaponTile.appendChild(weaponName);
+         weaponPrice = document.createElement("p");
+         weaponPrice.classList = "weapon-name";
+         weaponPrice.innerText = "$" + weaponArray.price;
+         weaponTile.appendChild(weaponPrice);
+         weaponContainer.appendChild(weaponTile); 
+    }
+    else{
+        console.log("ct");
+    }
+}
+// function showWeapons(category,weaponArray){
+//     let weaponContainer = document.getElementById("weaponContainer");
+//     let selectedTeam = localStorage.getItem("selected-team");
+//     console.log(selectedTeam);
+//     console.log("here"); //debug purpose. need to remove...
+//     if(selectedTeam === "counter-terrorists"){
+//         for(i=0; i<5; i++){
+//             if(weaponArray[i].category.name === category){
+//             let weaponTile = document.createElement("div");
+//             weaponTile.classList = "weapons";
+//             let weaponImage = document.createElement("img");
+//             weaponImage.src = weaponArray[i].image;
+//             weaponImage.classList = "weapon-image";
+//             weaponTile.appendChild(weaponImage);
+//             let weaponName = document.createElement("p");
+//             weaponName.classList = "weapon-name";
+//             weaponName.innerText = weaponArray[i].weapon.name;
+//             weaponTile.appendChild(weaponName);
+//             weaponPrice = document.createElement("p");
+//             weaponPrice.classList = "weapon-name";
+//             weaponPrice.innerText = "$" + weaponArray[i].price;
+//             weaponTile.appendChild(weaponPrice);
+//             weaponContainer.appendChild(weaponTile);
+//         }
+//     }
+//     }else{
+
+//     }
+// }
 
 
 
