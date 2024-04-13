@@ -72,6 +72,6 @@ body{
 }
 .active{
     transform: scale3d(1.2,1.2,1.2);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(3px);
     transition-duration: 500ms;
 }

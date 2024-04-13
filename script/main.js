@@ -67,14 +67,33 @@ function displaySelectedAgents(){
     }
     agentSelect(".agent-container");
 }
+//to select and active agent tiles.
+let isActive = false;
 function agentSelect(classname){
-    let agent = document.querySelectorAll(classname);
-    agent.forEach(function(item){
-        item.addEventListener("click", ()=>{
-            agent.forEach(function(item2){
-                item2.classList.remove('active')
-            });
-            item.classList.toggle("active");
-        })
-    });
+    let allAgents = document.querySelectorAll(classname);
+
+    for(let i=0; i<allAgents.length; i++) {
+        allAgents[i].addEventListener("click", function() {
+            playClickAudio();
+            if(allAgents[i].classList.contains("active")) {
+                allAgents[i].classList.remove("active");
+                isActive = false;
+            } else if(isActive == false) {
+                for(let j=0; j<allAgents.length; j++) {
+                    allAgents[j].classList.remove("active");
+                }
+                allAgents[i].classList.add("active");
+                isActive = true;
+                let selectedAgent = allAgents[i].innerText;
+                localStorage.setItem('selected-agent', selectedAgent);
+            } else if(isActive == true) {
+                for (let j=0; j<allAgents.length; j++) {
+                    allAgents[j].classList.remove("active");
+                }
+                allAgents[i].classList.add("active");
+                let selectedAgent = allAgents[i].innerText;
+                localStorage.setItem('selected-agent', selectedAgent);
+            }
+        });
+    }
 }
