@@ -31,11 +31,12 @@ body{
   }
 .agent-container{
     width: fit-content;
-    height: 25vh;
+    height: 23vh;
     background-color: rgba(44, 15, 12, .5);
     margin: 1em;
     padding: .5em;
     text-align: center;
+    cursor: crosshair;
 }
 .agent-container:hover{
     transform: scale3d(1.2,1.2,1.2);
@@ -74,4 +75,34 @@ body{
     transform: scale3d(1.2,1.2,1.2);
     backdrop-filter: blur(3px);
     transition-duration: 500ms;
+}
+#nextButton{
+    text-align: center;
+    margin-top: .5em;
+    width: 24dvw;
+    height: 8dvh;
+    border-radius: .2em;
+    background-color: rgba(44, 15, 12, .5);
+    border: none;
+    color: #f5f5f5;
+    backdrop-filter: blur(2px);
+    font-family: "csgo";
+    font-size: 1.7em;
+    cursor: crosshair;
+}
+#nextButton:hover{
+    font-size: 1.9em;
+    animation: fadeinfadeout .3s ease-in-out;
+}
+@keyframes fadeinfadeout {
+    0%{
+        font-size: 1.7em;
+    }
+    100%{
+        font-size: 1.9em;
+    }
+}
+#errorMessage{
+    color: red;
+    background-color: black;
 }

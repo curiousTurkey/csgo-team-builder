@@ -70,30 +70,78 @@ function displaySelectedAgents() {
 //to select and active agent tiles.
 let isActive = false;
 function agentSelect(classname) {
-    let allAgents = document.querySelectorAll(classname);
+    let agents = document.querySelectorAll(classname);
 
-    for (let i = 0; i < allAgents.length; i++) {
-        allAgents[i].addEventListener("click", function () {
+    for (let i = 0; i < agents.length; i++) {
+        agents[i].addEventListener("click", function () {
             playClickAudio();
-            if (allAgents[i].classList.contains("active")) {
-                allAgents[i].classList.remove("active");
+            if (agents[i].classList.contains("active")) {
+                agents[i].classList.remove("active");
                 isActive = false;
             } else if (isActive == false) {
-                for (let j = 0; j < allAgents.length; j++) {
-                    allAgents[j].classList.remove("active");
+                for (let j = 0; j < agents.length; j++) {
+                    agents[j].classList.remove("active");
                 }
-                allAgents[i].classList.add("active");
+                agents[i].classList.add("active");
                 isActive = true;
-                let selectedAgent = allAgents[i].innerText;
+                let selectedAgent = agents[i].innerText;
                 localStorage.setItem('selected-agent', selectedAgent);
             } else if (isActive == true) {
-                for (let j = 0; j < allAgents.length; j++) {
-                    allAgents[j].classList.remove("active");
+                for (let j = 0; j < agents.length; j++) {
+                    agents[j].classList.remove("active");
                 }
-                allAgents[i].classList.add("active");
-                let selectedAgent = allAgents[i].innerText;
+                agents[i].classList.add("active");
+                let selectedAgent = agents[i].innerText;
                 localStorage.setItem('selected-agent', selectedAgent);
             }
         });
     }
 }
+//funtion to display error message
+function errorDisplay(message){
+    let textSpan = document.getElementById("errorMessage");
+    textSpan.innerText = message;
+    textSpan.style.padding = ".5em";
+}
+//to go to weapon section 
+function goToWeaponSelection(){
+    console.log("here");
+    let inputBox = document.getElementById("input-name");
+    let value = inputBox.value.trim();
+    let wordCount = value.split(/\s+/).length;
+    let characterCount = value.length;
+    let flagAgent = false;
+    let flagName = false;
+    console.log(isActive)
+    if(isActive == false){
+        flagAgent = false;
+        console.log(isActive + "in")
+        errorDisplay("Choose your agent!");
+        return;
+    } else { 
+        flagAgent = true;
+    }
+    
+    if(value === ""){
+        flagName = false;
+        errorDisplay("Username can't be empty!");
+    }else if(characterCount > 20){
+        flagName = false;
+        errorDisplay("Invalid character length. No more than 20!");
+    }else if(wordCount > 2){
+        flagName = false;
+        errorDisplay("Invalid word count. No more than 2 words!");
+    }
+    else{
+        flagName = true;
+        errorDisplay("");
+        localStorage.setItem("username", value);
+    }
+    if(flagAgent === true && flagName === true){
+
+        window.location.href = "";
+    }   
+}
+
+
+
