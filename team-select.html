@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSGO: Team Builder</title>
     <link rel="shortcut icon" href="assets/Images/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="stylesheet/main.css">
+    <link rel="stylesheet" href="stylesheet/team-select.css">
 </head>
 <body>
-    <div>
-        <button id="start-button" class="js-button" onclick="window.location.href = 'team-select.html'">START</button>
+    <div class="team-select">
+        <div class="team terrorist" onclick="selectedTeam('terrorists')"><p>Terrorist</p></div>
+        <div class="team auto-select" onclick="randomTeam()"><p>Auto Select</p></div>
+        <div class="team counter-terrorist" onclick="selectedTeam('counter-terrorists')"><p>Counter Terrorist</p></div>
     </div>
     <!-- scripts -->
     <script src="script/sounds.js"></script>

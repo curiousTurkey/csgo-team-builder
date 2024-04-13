@@ -1,0 +1,72 @@
+@font-face {
+    font-family: "csgo";
+    src: url("../assets/fonts/cs_regular.ttf");
+}
+body{
+    font-family: "csgo";
+    background-image: url("../assets/images/cs_go_wallpaper.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.agent-list-container{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: .5em;
+    flex-wrap: wrap;
+    overflow: scroll;
+    height: 60dvh;
+    width: 60%;
+    color: #f5f5f5;
+}
+::-webkit-scrollbar {
+    width:0px;
+  }
+.agent-container{
+    width: fit-content;
+    height: 25vh;
+    background-color: rgba(44, 15, 12, .5);
+    margin: 1em;
+    padding: .5em;
+    text-align: center;
+}
+.agent-container:hover{
+    transform: scale3d(1.2,1.2,1.2);
+    backdrop-filter: blur(10px);
+    transition-duration: 500ms;
+}
+.agent-list-container img{
+    width: 85%;
+    height: 15vh;
+}
+#agentSelectHeading{
+    font-size: 3em;
+    text-decoration: underline;
+    color: #f5f5f5;
+    margin-top: 0;
+}
+.choose-name{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    font-size: 1.9em;
+    color: #f5f5f5;
+    justify-content: center;
+    align-items: center;
+}
+.choose-name p {
+    display: inline-block;
+    text-shadow: -1px 0 #2c0f0cff, 0 1px #2c0f0cff, 1px 0 #2c0f0cff, 0 -1px #2c0f0cff;
+}
+[type='text']{
+    border-color: #2c0f0cff;
+    border-width: .1em;
+    margin: 0 1em 0 1em;
+}

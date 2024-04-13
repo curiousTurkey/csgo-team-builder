@@ -1,0 +1,64 @@
+@font-face {
+    font-family: "csgo";
+    src: url("../assets/fonts/cs_regular.ttf");
+}
+body{
+    color: #f5f5f5;
+    background-image: url("../assets/images/cs_go_wallpaper.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+}
+.team-select{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    font-family: "csgo";
+    height: 90%;
+    align-items: center;
+}
+.team{
+    text-align: center;
+    width: 25vw;
+    height: fit-content;
+    border-radius: .2em;
+    background-color: rgba(44, 15, 12, .5);
+    border: none;
+    color: #f5f5f5;
+    backdrop-filter: blur(2px);
+    font-family: "csgo";
+    font-size: 1.7em;
+    cursor: crosshair;
+    padding: .5em 1em .5em 1em;
+}
+.terrorist:hover{
+    background-image: url("../assets/images/terrorist.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: fadein 1s;
+    transform: translateY(-.5em);
+}
+.auto-select:hover{
+    background-image: url("../assets/images/cs-go.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: fadein 1s;
+    transform: translateY(-.5em);
+}
+.counter-terrorist:hover{
+    background-image: url("../assets/images/counter-terrorist.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: fadein 1s;
+    transform: translateY(-.5em);
+}
+@keyframes fadein {
+    0%{
+        opacity: .4;
+    }
+    100%{
+        opacity: 1;
+    }
+}

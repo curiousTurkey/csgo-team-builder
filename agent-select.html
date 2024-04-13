@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSGO: Team Builder</title>
     <link rel="shortcut icon" href="assets/Images/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="stylesheet/main.css">
+    <link rel="stylesheet" href="stylesheet/agent-select.css">
 </head>
-<body>
-    <div>
-        <button id="start-button" class="js-button" onclick="window.location.href = 'team-select.html'">START</button>
+<body onload="displaySelectedAgents()">
+    <h1 id="agentSelectHeading"></h1>
+    <div id="agentListContainer" class="agent-list-container">
+    </div>
+    <div class="choose-name">
+        <p>Choose Name: </p> <input type="text" name="name" id="input-name">
     </div>
     <!-- scripts -->
     <script src="script/sounds.js"></script>
