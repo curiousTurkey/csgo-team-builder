@@ -70,3 +70,8 @@ body{
     border-width: .1em;
     margin: 0 1em 0 1em;
 }
+.active{
+    transform: scale3d(1.2,1.2,1.2);
+    backdrop-filter: blur(10px);
+    transition-duration: 500ms;
+}

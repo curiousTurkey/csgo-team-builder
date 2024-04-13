@@ -67,24 +67,14 @@ function displaySelectedAgents(){
     }
     agentSelect(".agent-container");
 }
-//selecting agents from screen and making it active and inactive.
-let doubleClick = false;
 function agentSelect(classname){
     let agent = document.querySelectorAll(classname);
     agent.forEach(function(item){
         item.addEventListener("click", ()=>{
-            if(doubleClick === false){
             agent.forEach(function(item2){
-                item2.classList.remove('active');
+                item2.classList.remove('active')
             });
-            item.classList.add("active");
-            doubleClick = true;
-        }else{
-            agent.forEach(function(item3){
-                item3.classList.remove('active');
-            });
-            doubleClick = false;
-        }
+            item.classList.toggle("active");
         })
     });
 }
