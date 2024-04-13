@@ -40,6 +40,20 @@ function getRandomNumber(min, max) {
     // Calculate and return the random number
     return min + randomIndex * 50;
 }
+function returnWeaponObject(weapon) {
+    let weaponObject = {
+        weaponId: weapon.weapon.id,
+        weaponName: weapon.name,
+        weaponSkinName: weapon.weapon.name,
+        patternName: weapon.pattern.name,
+        categoryName: weapon.category.name,
+        teamId: weapon.team.id,
+        teamName: weapon.team.name,
+        weaponImage: weapon.image,
+        weaponPrice: weapon.price,
+    }
+    return weaponObject;
+}
 //call to do api fetch 
 apiFetch(WEAPONS_URL, (response) => {
     let min;
@@ -51,49 +65,47 @@ apiFetch(WEAPONS_URL, (response) => {
                 if (tempArray[i].pattern !== null)
                     if (tempArray[i].team.id !== null)
                         if (tempArray[i].weapon.name !== null) {
-                            if(tempArray[i].category.name === 'Pistols'){
+                            if (tempArray[i].category.name === 'Pistols') {
                                 min = 200;
                                 max = 700;
                                 tempArray[i].price = getRandomNumber(min, max);
-                                pistolsArray.push(tempArray[i]);
+                                pistolsArray.push(returnWeaponObject(tempArray[i]));
                             }
-                            if(tempArray[i].category.name === 'Rifles'){
+                            if (tempArray[i].category.name === 'Rifles') {
                                 min = 1500;
                                 max = 3500;
-                                tempArray[i].price = getRandomNumber(min,max);
-                                riflesArray.push(tempArray[i]);
+                                tempArray[i].price = getRandomNumber(min, max);
+                                riflesArray.push(returnWeaponObject(tempArray[i]));
                             }
-                            if(tempArray[i].category.name === 'Heavy'){
+                            if (tempArray[i].category.name === 'Heavy') {
                                 min = 2500;
                                 max = 4500;
-                                tempArray[i].price = getRandomNumber(min,max);
-                                heavyArray.push(tempArray[i]);
+                                tempArray[i].price = getRandomNumber(min, max);
+                                heavyArray.push(returnWeaponObject(tempArray[i]));
                             }
-                            if(tempArray[i].category.name === 'SMGs'){
+                            if (tempArray[i].category.name === 'SMGs') {
                                 min = 1000;
                                 max = 1500;
-                                tempArray[i].price = getRandomNumber(min,max);
-                                smgArray.push(tempArray[i]);
+                                tempArray[i].price = getRandomNumber(min, max);
+                                smgArray.push(returnWeaponObject(tempArray[i]));
                             }
-                            if(tempArray[i].category.name === 'Knives'){
+                            if (tempArray[i].category.name === 'Knives') {
                                 min = 100;
                                 max = 500;
-                                tempArray[i].price = getRandomNumber(min,max);
-                                knivesArray.push(tempArray[i]);
+                                tempArray[i].price = getRandomNumber(min, max);
+                                knivesArray.push(returnWeaponObject(tempArray[i]));
                             }
-                            if(tempArray[i].category.name === 'Gloves'){
+                            if (tempArray[i].category.name === 'Gloves') {
                                 min = 100;
                                 max = 500;
-                                tempArray[i].price = getRandomNumber(min,max);
-                                glovesArray.push(tempArray[i]);
+                                tempArray[i].price = getRandomNumber(min, max);
+                                glovesArray.push(returnWeaponObject(tempArray[i]));
                             }
                         } else {
                             continue;
                         }
     }
     tempArray = [];
-    console.log(glovesArray);
-    // console.log(weaponArray);
 });
 //function to call selected team
 function selectedTeam(teamName) {
@@ -216,21 +228,66 @@ function goToWeaponSelection() {
 //category.name, 
 //add event listeners to all categories
 document.querySelectorAll(".weapon-category").forEach((item) => {
-    item.addEventListener("click",()=>{
+    let selectedTeam = localStorage.getItem("selected-team");
+    let filteredWeaponsArray = [];
+    item.addEventListener("click", () => {
         playClickAudio();
         console.log(item.innerText);
-        if(item.innerText === "Gloves"){
-            insertWeaponCategories(glovesArray);
-        }else if(item.innerText === "Knives"){
-            insertWeaponCategories(knivesArray);
-        }else if(item.innerText === "Pistols"){
-            insertWeaponCategories(pistolsArray);
-        }else if(item.innerText === "SMGs"){
-            insertWeaponCategories(smgArray);
-        }else if(item.innerText === "Rifles"){
-            insertWeaponCategories(riflesArray);
-        }else if(item.innerText === "Heavy"){
-            insertWeaponCategories(heavyArray);
+        if (item.innerText === "Gloves") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            console.log(glovesArray);
+            for (let i = 0; i < glovesArray.length; i++) {
+                if (glovesArray[i].teamId === selectedTeam || glovesArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(glovesArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
+        } else if (item.innerText === "Knives") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            for (let i = 0; i < knivesArray.length; i++) {
+                if (knivesArray[i].teamId === selectedTeam || knivesArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(knivesArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
+        } else if (item.innerText === "Pistols") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            for (let i = 0; i < pistolsArray.length; i++) {
+                if (pistolsArray[i].teamId === selectedTeam || pistolsArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(pistolsArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
+        } else if (item.innerText === "SMGs") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            for (let i = 0; i < smgArray.length; i++) {
+                if (smgArray[i].teamId === selectedTeam || smgArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(smgArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
+        } else if (item.innerText === "Rifles") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            for (let i = 0; i < riflesArray.length; i++) {
+                if (riflesArray[i].teamId === selectedTeam || riflesArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(riflesArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
+        } else if (item.innerText === "Heavy") {
+            document.getElementById("weaponContainer").innerHTML = "";
+            for (let i = 0; i < heavyArray.length; i++) {
+                if (heavyArray[i].teamId === selectedTeam || heavyArray[i].teamId === 'both') {
+                    console.log("inside if")
+                    filteredWeaponsArray.push(heavyArray[i]);
+                }
+            }
+            insertWeaponCategories(filteredWeaponsArray);
         }
     })
 });
@@ -238,25 +295,28 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
 //function to get unique array
 function removeduplicates(arr) {
     let outputArray = Array.from(new Set(arr))
-    return outputArray
+    return outputArray;
 }
 //function to get unique category array
-function getCategory(weaponTypeArray){
+function getCategory(weaponTypeArray) {
     let tempArray = [];
-    for(let i = 0; i < weaponTypeArray.length; i++){
-    tempArray.push(weaponTypeArray[i].weapon.name);
+    console.log("get cate")
+    console.log(weaponTypeArray);
+    for (let i = 0; i < weaponTypeArray.length; i++) {
+        tempArray.push(weaponTypeArray[i].weaponSkinName);
     }
     uniqueArray = removeduplicates(tempArray);
     console.log(uniqueArray);
     return uniqueArray;
 }
 //function to display weapon categories
-function insertWeaponCategories(weaponTypeArray){
+function insertWeaponCategories(weaponTypeArray) {
     let categoryContainer = document.getElementById("weaponClass");
+    let selectedTeam = localStorage.getItem("selected-team");
     categoryContainer.innerHTML = "";
     let uniqueArray = getCategory(weaponTypeArray);
     console.log(uniqueArray);
-    for(let i = 0; i < uniqueArray.length; i++){
+    for (let i = 0; i < uniqueArray.length; i++) {
         let categoryTile = document.createElement("div");
         categoryTile.classList = "category-tile";
         let categoryName = document.createElement("p");
@@ -266,76 +326,43 @@ function insertWeaponCategories(weaponTypeArray){
         categoryContainer.appendChild(categoryTile);
     }
     //event listener to play audio and call functions
-document.querySelectorAll(".category-tile").forEach((item)=>{
-    item.addEventListener("click",()=>{
-        document.getElementById("weaponContainer").innerHTML = "";
-        playClickAudio();
-        for(let i=0; i< weaponTypeArray.length; i++){
-        if(item.innerText === weaponTypeArray[i].weapon.name){
-            displayWeapons(weaponTypeArray[i]);
-        }
-        }
+    document.querySelectorAll(".category-tile").forEach((item) => {
+        item.addEventListener("click", () => {
+            document.getElementById("weaponContainer").innerHTML = "";
+            playClickAudio();
+            for (let i = 0; i < weaponTypeArray.length; i++) {
+                if (item.innerText === weaponTypeArray[i].weaponSkinName) {
+                    displayWeapons(weaponTypeArray[i]);
+                }
+            }
+        });
     });
-});
-} 
+}
 
 
 
 //function to display weapons according to category
-function displayWeapons(weaponArray){
+function displayWeapons(weaponArray) {
     let weaponContainer = document.getElementById("weaponContainer");
     let selectedTeam = localStorage.getItem("selected-team");
     console.log(selectedTeam);
-    if(selectedTeam === "counter-terrorists"){  
-         let weaponTile = document.createElement("div");
-         weaponTile.classList = "weapons";
-         let weaponImage = document.createElement("img");
-         weaponImage.src = weaponArray.image;
-         weaponImage.classList = "weapon-image";
-         weaponTile.appendChild(weaponImage);
-         let weaponName = document.createElement("p");
-         weaponName.classList = "weapon-name";
-         weaponName.innerText = weaponArray.weapon.name;
-         weaponTile.appendChild(weaponName);
-         weaponPrice = document.createElement("p");
-         weaponPrice.classList = "weapon-name";
-         weaponPrice.innerText = "$" + weaponArray.price;
-         weaponTile.appendChild(weaponPrice);
-         weaponContainer.appendChild(weaponTile); 
-    }
-    else{
-        console.log("ct");
-    }
+    let weaponTile = document.createElement("div");
+    weaponTile.classList = "weapons";
+    let weaponImage = document.createElement("img");
+    weaponImage.src = weaponArray.weaponImage;
+    weaponImage.classList = "weapon-image";
+    weaponTile.appendChild(weaponImage);
+    let weaponName = document.createElement("p");
+    weaponName.classList = "weapon-name";
+    weaponName.innerText = weaponArray.weaponSkinName;
+    weaponTile.appendChild(weaponName);
+    weaponCost = document.createElement("p");
+    weaponCost.classList = "weapon-name";
+    weaponCost.innerText = "$" + weaponArray.weaponPrice;
+    weaponTile.appendChild(weaponCost);
+    weaponContainer.appendChild(weaponTile);
 }
-// function showWeapons(category,weaponArray){
-//     let weaponContainer = document.getElementById("weaponContainer");
-//     let selectedTeam = localStorage.getItem("selected-team");
-//     console.log(selectedTeam);
-//     console.log("here"); //debug purpose. need to remove...
-//     if(selectedTeam === "counter-terrorists"){
-//         for(i=0; i<5; i++){
-//             if(weaponArray[i].category.name === category){
-//             let weaponTile = document.createElement("div");
-//             weaponTile.classList = "weapons";
-//             let weaponImage = document.createElement("img");
-//             weaponImage.src = weaponArray[i].image;
-//             weaponImage.classList = "weapon-image";
-//             weaponTile.appendChild(weaponImage);
-//             let weaponName = document.createElement("p");
-//             weaponName.classList = "weapon-name";
-//             weaponName.innerText = weaponArray[i].weapon.name;
-//             weaponTile.appendChild(weaponName);
-//             weaponPrice = document.createElement("p");
-//             weaponPrice.classList = "weapon-name";
-//             weaponPrice.innerText = "$" + weaponArray[i].price;
-//             weaponTile.appendChild(weaponPrice);
-//             weaponContainer.appendChild(weaponTile);
-//         }
-//     }
-//     }else{
 
-//     }
-// }
 
 
 
