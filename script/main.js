@@ -42,7 +42,7 @@ function getRandomNumber(min, max) {
 }
 function returnWeaponObject(weapon) {
     let weaponObject = {
-        weaponId: weapon.weapon.id,
+        weaponId: weapon.id,
         weaponName: weapon.name,
         weaponSkinName: weapon.weapon.name,
         patternName: weapon.pattern.name,
@@ -105,7 +105,7 @@ apiFetch(WEAPONS_URL, (response) => {
                             continue;
                         }
     }
-    tempArray = [];
+    console.log(tempArray);
 });
 //function to call selected team
 function selectedTeam(teamName) {
@@ -330,13 +330,15 @@ function insertWeaponCategories(weaponTypeArray) {
         item.addEventListener("click", () => {
             document.getElementById("weaponContainer").innerHTML = "";
             playClickAudio();
-            for (let i = 0; i < weaponTypeArray.length; i++) {
-                if (item.innerText === weaponTypeArray[i].weaponSkinName) {
-                    displayWeapons(weaponTypeArray[i]);
-                }
-            }
+            // for (let i = 0; i < weaponTypeArray.length; i++) {
+            //     if (item.innerText === weaponTypeArray[i].weaponSkinName) {
+            //         displayWeapons(weaponTypeArray[i]);
+            //     }
+            // }
+            displayWeapons(weaponTypeArray);
         });
     });
+    
 }
 
 
@@ -344,25 +346,57 @@ function insertWeaponCategories(weaponTypeArray) {
 //function to display weapons according to category
 function displayWeapons(weaponArray) {
     let weaponContainer = document.getElementById("weaponContainer");
-    let selectedTeam = localStorage.getItem("selected-team");
-    console.log(selectedTeam);
+
+    for(let i=0; i<weaponArray.length; i++){
     let weaponTile = document.createElement("div");
     weaponTile.classList = "weapons";
     let weaponImage = document.createElement("img");
-    weaponImage.src = weaponArray.weaponImage;
+    weaponImage.src = weaponArray[i].weaponImage;
     weaponImage.classList = "weapon-image";
     weaponTile.appendChild(weaponImage);
     let weaponName = document.createElement("p");
     weaponName.classList = "weapon-name";
-    weaponName.innerText = weaponArray.weaponSkinName;
+    weaponName.innerText = weaponArray[i].weaponSkinName;
     weaponTile.appendChild(weaponName);
     weaponCost = document.createElement("p");
     weaponCost.classList = "weapon-name";
-    weaponCost.innerText = "$" + weaponArray.weaponPrice;
+    weaponCost.innerText = "$" + weaponArray[i].weaponPrice;
     weaponTile.appendChild(weaponCost);
+    let hiddenSpan = document.createElement("span");
+    hiddenSpan.style.visibility = "hidden";
+    hiddenSpan.innerText = weaponArray[i].weaponId;
+    weaponTile.appendChild(hiddenSpan);
     weaponContainer.appendChild(weaponTile);
+    }
+    setWeaponActive();
 }
 
+//function to set active status to selected weapons
+let isWeaponActive = false;
+let activeWeapon;
+function setWeaponActive(){
+    let allWeapons = document.querySelectorAll(".weapons");
 
-
+    for(let i=0; i<allWeapons.length; i++) {
+        allWeapons[i].addEventListener("click", function() {
+            if(allWeapons[i].classList.contains("active")) {
+                allWeapons[i].classList.remove("active");
+                isWeaponActive = false;
+            } else if(isWeaponActive == false) {
+                for(let j=0; j<allWeapons.length; j++) {
+                    allWeapons[j].classList.remove("active");
+                }
+                allWeapons[i].classList.add("active");
+                isWeaponActive = true;
+                activeWeapon = document.querySelector(".active span").innerHTML;  
+            } else if(isWeaponActive == true) {
+                for (let j=0; j<allWeapons.length; j++) {
+                    allWeapons[j].classList.remove("active");
+                }
+                allWeapons[i].classList.add("active");
+                activeWeapon = document.querySelector(".active span").innerHTML;
+            }
+        });
+    }
+}
 
