@@ -395,7 +395,7 @@ function setWeaponActive(weaponCategory) {
 
 //function to save selected weapon
 let savedWeapon = new Array(5);
-document.getElementById("balance").innerText = "Balance: " + balance;
+document.getElementById("balance").innerText = "Balance: $" + balance;
 function saveWeapon(category, weapon) {
     let balanceDiv = document.getElementById("balance");
     switch (category) {
@@ -505,5 +505,23 @@ function saveWeapon(category, weapon) {
                 }
             });
             break;
+    }
+}
+//function to validate weapon selection
+function validateWeaponSelection(){
+    if(savedWeapon[0] === undefined){
+        console.log("select a pistol to continue");
+    } else if(savedWeapon[1] === undefined){
+        console.log("select a Rifle to continue");
+    } else if(savedWeapon[2] === undefined){
+        console.log("select a Heavy weapon to continue");
+    } else if(savedWeapon[3] === undefined){
+        console.log("select an SMG to continue");
+    } else if(savedWeapon[4] === undefined){
+        console.log("select a Knife to continue")
+    } else if(savedWeapon[5] === undefined){
+        console.log("select a glove to continue");
+    } else if(balance < 0){
+        console.log("Can't proceed , choose a new loadout within $9000");
     }
 }
