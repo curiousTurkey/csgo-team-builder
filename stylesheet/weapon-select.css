@@ -44,7 +44,7 @@ body{
 }
 .weapon-container{
     height: 40dvh;
-    width: 75%;
+    width: 85%;
     background-color:rgba(231, 204, 198, .5);
     margin-left: 4.5em;
     border-radius: .2em;
@@ -72,6 +72,11 @@ body{
     height: 60%;
     width: 60%;
 }
+.active{
+    backdrop-filter: blur(10px);
+    transition-duration: 1000ms;
+    transform: scale3d(1.2,1.2,1.2);
+}
 .weapon-class{
     display: flex;
     flex-direction: row;
@@ -91,10 +96,14 @@ body{
     transform: scale3d(1.1,1.1,1.1);
     transition-duration: 500ms;
 }
-#nextButton{
+.advance-button{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#nextButton, .balance{
     text-align: center;
     margin-top: 1em;
-    margin-left: 2.6em;
     margin-bottom: 1.5em;
     width: 24dvw;
     height: 8dvh;
@@ -107,6 +116,6 @@ body{
     cursor: crosshair;
 }
 #nextButton:hover{
-    font-size: 1.9em;
+    transform: scale(1.1);
     transition-duration: 800ms;
 }

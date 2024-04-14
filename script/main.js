@@ -3,6 +3,7 @@ const AGENT_URL = "https://bymykel.github.io/CSGO-API/api/en/agents.json";
 const WEAPONS_URL = "https://bymykel.github.io/CSGO-API/api/en/skins.json";
 
 //array to store api data
+let balance = 9000;
 let agentArray = [];
 // let weaponsArray = [];
 let pistolsArray = [];
@@ -41,6 +42,7 @@ function getRandomNumber(min, max) {
     return min + randomIndex * 50;
 }
 function returnWeaponObject(weapon) {
+    
     let weaponObject = {
         weaponId: weapon.id,
         weaponName: weapon.name,
@@ -68,8 +70,9 @@ apiFetch(WEAPONS_URL, (response) => {
                             if (tempArray[i].category.name === 'Pistols') {
                                 min = 200;
                                 max = 700;
-                                tempArray[i].price = getRandomNumber(min, max);
+                                tempArray[i].price = getRandomNumber(min, max)
                                 pistolsArray.push(returnWeaponObject(tempArray[i]));
+
                             }
                             if (tempArray[i].category.name === 'Rifles') {
                                 min = 1500;
@@ -105,7 +108,7 @@ apiFetch(WEAPONS_URL, (response) => {
                             continue;
                         }
     }
-    console.log(tempArray);
+    tempArray = [];
 });
 //function to call selected team
 function selectedTeam(teamName) {
@@ -232,35 +235,30 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
     let filteredWeaponsArray = [];
     item.addEventListener("click", () => {
         playClickAudio();
-        console.log(item.innerText);
         if (item.innerText === "Gloves") {
             document.getElementById("weaponContainer").innerHTML = "";
-            console.log(glovesArray);
             for (let i = 0; i < glovesArray.length; i++) {
                 if (glovesArray[i].teamId === selectedTeam || glovesArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(glovesArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         } else if (item.innerText === "Knives") {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < knivesArray.length; i++) {
                 if (knivesArray[i].teamId === selectedTeam || knivesArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(knivesArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         } else if (item.innerText === "Pistols") {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < pistolsArray.length; i++) {
                 if (pistolsArray[i].teamId === selectedTeam || pistolsArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(pistolsArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         } else if (item.innerText === "SMGs") {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < smgArray.length; i++) {
@@ -269,7 +267,7 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
                     filteredWeaponsArray.push(smgArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         } else if (item.innerText === "Rifles") {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < riflesArray.length; i++) {
@@ -278,7 +276,7 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
                     filteredWeaponsArray.push(riflesArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         } else if (item.innerText === "Heavy") {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < heavyArray.length; i++) {
@@ -287,7 +285,7 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
                     filteredWeaponsArray.push(heavyArray[i]);
                 }
             }
-            insertWeaponCategories(filteredWeaponsArray);
+            insertWeaponCategories(filteredWeaponsArray, item.innerText);
         }
     })
 });
@@ -300,8 +298,6 @@ function removeduplicates(arr) {
 //function to get unique category array
 function getCategory(weaponTypeArray) {
     let tempArray = [];
-    console.log("get cate")
-    console.log(weaponTypeArray);
     for (let i = 0; i < weaponTypeArray.length; i++) {
         tempArray.push(weaponTypeArray[i].weaponSkinName);
     }
@@ -310,12 +306,11 @@ function getCategory(weaponTypeArray) {
     return uniqueArray;
 }
 //function to display weapon categories
-function insertWeaponCategories(weaponTypeArray) {
+function insertWeaponCategories(weaponTypeArray, weaponCategory) {
     let categoryContainer = document.getElementById("weaponClass");
     let selectedTeam = localStorage.getItem("selected-team");
     categoryContainer.innerHTML = "";
     let uniqueArray = getCategory(weaponTypeArray);
-    console.log(uniqueArray);
     for (let i = 0; i < uniqueArray.length; i++) {
         let categoryTile = document.createElement("div");
         categoryTile.classList = "category-tile";
@@ -330,73 +325,193 @@ function insertWeaponCategories(weaponTypeArray) {
         item.addEventListener("click", () => {
             document.getElementById("weaponContainer").innerHTML = "";
             playClickAudio();
-            // for (let i = 0; i < weaponTypeArray.length; i++) {
-            //     if (item.innerText === weaponTypeArray[i].weaponSkinName) {
-            //         displayWeapons(weaponTypeArray[i]);
-            //     }
-            // }
-            displayWeapons(weaponTypeArray);
+            displayWeapons(weaponTypeArray, weaponCategory,item.innerText);
         });
     });
-    
+
 }
 
 
 
 //function to display weapons according to category
-function displayWeapons(weaponArray) {
+function displayWeapons(weaponTypeArray, weaponCategory,weaponSkinName) {
     let weaponContainer = document.getElementById("weaponContainer");
-
-    for(let i=0; i<weaponArray.length; i++){
-    let weaponTile = document.createElement("div");
-    weaponTile.classList = "weapons";
-    let weaponImage = document.createElement("img");
-    weaponImage.src = weaponArray[i].weaponImage;
-    weaponImage.classList = "weapon-image";
-    weaponTile.appendChild(weaponImage);
-    let weaponName = document.createElement("p");
-    weaponName.classList = "weapon-name";
-    weaponName.innerText = weaponArray[i].weaponSkinName;
-    weaponTile.appendChild(weaponName);
-    weaponCost = document.createElement("p");
-    weaponCost.classList = "weapon-name";
-    weaponCost.innerText = "$" + weaponArray[i].weaponPrice;
-    weaponTile.appendChild(weaponCost);
-    let hiddenSpan = document.createElement("span");
-    hiddenSpan.style.visibility = "hidden";
-    hiddenSpan.innerText = weaponArray[i].weaponId;
-    weaponTile.appendChild(hiddenSpan);
-    weaponContainer.appendChild(weaponTile);
+    for (let i = 0; i < weaponTypeArray.length; i++) {
+        if(weaponSkinName === weaponTypeArray[i].weaponSkinName){
+        let weaponTile = document.createElement("div");
+        weaponTile.classList = "weapons";
+        let weaponImage = document.createElement("img");
+        weaponImage.src = weaponTypeArray[i].weaponImage;
+        weaponImage.classList = "weapon-image";
+        weaponTile.appendChild(weaponImage);
+        let weaponName = document.createElement("p");
+        weaponName.classList = "weapon-name";
+        weaponName.innerText = weaponTypeArray[i].weaponSkinName;
+        weaponTile.appendChild(weaponName);
+        weaponCost = document.createElement("p");
+        weaponCost.classList = "weapon-price";
+        weaponCost.innerText = "" + weaponTypeArray[i].weaponPrice;
+        weaponTile.appendChild(weaponCost);
+        let hiddenSpan = document.createElement("span");
+        hiddenSpan.style.visibility = "hidden";
+        hiddenSpan.innerText = weaponTypeArray[i].weaponId;
+        weaponTile.appendChild(hiddenSpan);
+        weaponContainer.appendChild(weaponTile);
+        }
     }
-    setWeaponActive();
+    setWeaponActive(weaponCategory);
 }
 
 //function to set active status to selected weapons
 let isWeaponActive = false;
 let activeWeapon;
-function setWeaponActive(){
-    let allWeapons = document.querySelectorAll(".weapons");
 
-    for(let i=0; i<allWeapons.length; i++) {
-        allWeapons[i].addEventListener("click", function() {
-            if(allWeapons[i].classList.contains("active")) {
+
+function setWeaponActive(weaponCategory) {
+    let allWeapons = document.querySelectorAll(".weapons");
+    for (let i = 0; i < allWeapons.length; i++) {
+        allWeapons[i].addEventListener("click", function () {
+            playClickAudio();
+            if (allWeapons[i].classList.contains("active")) {
+                console.log("first here")
                 allWeapons[i].classList.remove("active");
                 isWeaponActive = false;
-            } else if(isWeaponActive == false) {
-                for(let j=0; j<allWeapons.length; j++) {
+                saveWeapon(weaponCategory, null);
+               
+            } else if (isWeaponActive == false) {
+                console.log("second here")
+                for (let j = 0; j < allWeapons.length; j++) {
                     allWeapons[j].classList.remove("active");
                 }
                 allWeapons[i].classList.add("active");
                 isWeaponActive = true;
-                activeWeapon = document.querySelector(".active span").innerHTML;  
-            } else if(isWeaponActive == true) {
-                for (let j=0; j<allWeapons.length; j++) {
+                activeWeapon = document.querySelector(".active span").innerHTML;
+                saveWeapon(weaponCategory, activeWeapon);
+                
+            } else if (isWeaponActive == true) {
+                console.log("third here");
+                let d = document.querySelector(".active .weapon-price").innerText;
+                balance += Number(d);
+                for (let j = 0; j < allWeapons.length; j++) {
                     allWeapons[j].classList.remove("active");
                 }
                 allWeapons[i].classList.add("active");
                 activeWeapon = document.querySelector(".active span").innerHTML;
+                saveWeapon(weaponCategory, activeWeapon);
             }
         });
     }
 }
 
+//function to save selected weapon
+let savedWeapon = [];
+document.getElementById("balance").innerText = "Balance: " + balance;
+function saveWeapon(category, weapon) {
+    let balanceDiv = document.getElementById("balance");
+    switch (category) {
+        case 'Pistols':
+            if (weapon !== null) {
+                pistolsArray.forEach((item) => {
+                    if (item.weaponId === weapon) {
+                        savedWeapon[0] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(balance);
+                    }
+                });
+                console.log(savedWeapon[0]);
+            } else {
+                balance += savedWeapon[0].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[0] = null;
+                console.log(savedWeapon)
+                 console.log(balance);
+            }
+            break;
+        case 'Rifles':
+            if(weapon !== null){
+                riflesArray.forEach((item)=>{
+                    if(item.weaponId === weapon){
+                        savedWeapon[1] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(savedWeapon)
+                    }
+                });
+            } else {
+                balance += savedWeapon[0].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[1] = null;
+                console.log(savedWeapon)
+            }
+            break;
+        case 'Heavy':
+            if(weapon !== null){
+                heavyArray.forEach((item)=>{
+                    if(item.weaponId === weapon){
+                        savedWeapon[2] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(savedWeapon)
+                    }
+                });
+            } else {
+                balance += savedWeapon[2].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[2] = null;
+                console.log(savedWeapon)
+            }
+            break;
+        case 'SMGs':
+            if(weapon !== null){
+                smgArray.forEach((item)=>{
+                    if(item.weaponId === weapon){
+                        savedWeapon[3] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(savedWeapon)
+                    }
+                });
+            } else {
+                balance += savedWeapon[3].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[3] = null;
+                console.log(savedWeapon)
+            }
+            break;
+        case 'Knives':
+            if(weapon !== null){
+                knivesArray.forEach((item)=>{
+                    if(item.weaponId === weapon){
+                        savedWeapon[4] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(savedWeapon)
+                    }
+                });
+            } else {
+                balance += savedWeapon[4].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[4] = null;
+                console.log(savedWeapon)
+            }
+            break;
+        case 'Gloves':
+            if(weapon !== null){
+                glovesArray.forEach((item)=>{
+                    if(item.weaponId === weapon){
+                        savedWeapon[5] = item;
+                        balance -= item.weaponPrice;
+                        balanceDiv.innerText = "Balance: " + balance;
+                        console.log(savedWeapon)
+                    }
+                });
+            } else {
+                balance += savedWeapon[5].weaponPrice;
+                balanceDiv.innerText = "Balance: " + balance;
+                savedWeapon[5] = null;
+                console.log(savedWeapon)
+            }
+            break;
+    }
+}
