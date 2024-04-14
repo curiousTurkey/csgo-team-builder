@@ -42,7 +42,7 @@ function getRandomNumber(min, max) {
     return min + randomIndex * 50;
 }
 function returnWeaponObject(weapon) {
-    
+
     let weaponObject = {
         weaponId: weapon.id,
         weaponName: weapon.name,
@@ -263,7 +263,6 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < smgArray.length; i++) {
                 if (smgArray[i].teamId === selectedTeam || smgArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(smgArray[i]);
                 }
             }
@@ -272,7 +271,6 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < riflesArray.length; i++) {
                 if (riflesArray[i].teamId === selectedTeam || riflesArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(riflesArray[i]);
                 }
             }
@@ -281,7 +279,6 @@ document.querySelectorAll(".weapon-category").forEach((item) => {
             document.getElementById("weaponContainer").innerHTML = "";
             for (let i = 0; i < heavyArray.length; i++) {
                 if (heavyArray[i].teamId === selectedTeam || heavyArray[i].teamId === 'both') {
-                    console.log("inside if")
                     filteredWeaponsArray.push(heavyArray[i]);
                 }
             }
@@ -325,7 +322,7 @@ function insertWeaponCategories(weaponTypeArray, weaponCategory) {
         item.addEventListener("click", () => {
             document.getElementById("weaponContainer").innerHTML = "";
             playClickAudio();
-            displayWeapons(weaponTypeArray, weaponCategory,item.innerText);
+            displayWeapons(weaponTypeArray, weaponCategory, item.innerText);
         });
     });
 
@@ -334,29 +331,29 @@ function insertWeaponCategories(weaponTypeArray, weaponCategory) {
 
 
 //function to display weapons according to category
-function displayWeapons(weaponTypeArray, weaponCategory,weaponSkinName) {
+function displayWeapons(weaponTypeArray, weaponCategory, weaponSkinName) {
     let weaponContainer = document.getElementById("weaponContainer");
     for (let i = 0; i < weaponTypeArray.length; i++) {
-        if(weaponSkinName === weaponTypeArray[i].weaponSkinName){
-        let weaponTile = document.createElement("div");
-        weaponTile.classList = "weapons";
-        let weaponImage = document.createElement("img");
-        weaponImage.src = weaponTypeArray[i].weaponImage;
-        weaponImage.classList = "weapon-image";
-        weaponTile.appendChild(weaponImage);
-        let weaponName = document.createElement("p");
-        weaponName.classList = "weapon-name";
-        weaponName.innerText = weaponTypeArray[i].weaponSkinName;
-        weaponTile.appendChild(weaponName);
-        weaponCost = document.createElement("p");
-        weaponCost.classList = "weapon-price";
-        weaponCost.innerText = "" + weaponTypeArray[i].weaponPrice;
-        weaponTile.appendChild(weaponCost);
-        let hiddenSpan = document.createElement("span");
-        hiddenSpan.style.visibility = "hidden";
-        hiddenSpan.innerText = weaponTypeArray[i].weaponId;
-        weaponTile.appendChild(hiddenSpan);
-        weaponContainer.appendChild(weaponTile);
+        if (weaponSkinName === weaponTypeArray[i].weaponSkinName) {
+            let weaponTile = document.createElement("div");
+            weaponTile.classList = "weapons";
+            let weaponImage = document.createElement("img");
+            weaponImage.src = weaponTypeArray[i].weaponImage;
+            weaponImage.classList = "weapon-image";
+            weaponTile.appendChild(weaponImage);
+            let weaponName = document.createElement("p");
+            weaponName.classList = "weapon-name";
+            weaponName.innerText = weaponTypeArray[i].weaponSkinName;
+            weaponTile.appendChild(weaponName);
+            weaponCost = document.createElement("p");
+            weaponCost.classList = "weapon-price";
+            weaponCost.innerText = "" + weaponTypeArray[i].weaponPrice;
+            weaponTile.appendChild(weaponCost);
+            let hiddenSpan = document.createElement("span");
+            hiddenSpan.style.visibility = "hidden";
+            hiddenSpan.innerText = weaponTypeArray[i].weaponId;
+            weaponTile.appendChild(hiddenSpan);
+            weaponContainer.appendChild(weaponTile);
         }
     }
     setWeaponActive(weaponCategory);
@@ -373,13 +370,9 @@ function setWeaponActive(weaponCategory) {
         allWeapons[i].addEventListener("click", function () {
             playClickAudio();
             if (allWeapons[i].classList.contains("active")) {
-                console.log("first here")
                 allWeapons[i].classList.remove("active");
                 isWeaponActive = false;
-                saveWeapon(weaponCategory, null);
-               
             } else if (isWeaponActive == false) {
-                console.log("second here")
                 for (let j = 0; j < allWeapons.length; j++) {
                     allWeapons[j].classList.remove("active");
                 }
@@ -387,11 +380,8 @@ function setWeaponActive(weaponCategory) {
                 isWeaponActive = true;
                 activeWeapon = document.querySelector(".active span").innerHTML;
                 saveWeapon(weaponCategory, activeWeapon);
-                
             } else if (isWeaponActive == true) {
-                console.log("third here");
-                let d = document.querySelector(".active .weapon-price").innerText;
-                balance += Number(d);
+                console.log(allWeapons[i])
                 for (let j = 0; j < allWeapons.length; j++) {
                     allWeapons[j].classList.remove("active");
                 }
@@ -404,114 +394,116 @@ function setWeaponActive(weaponCategory) {
 }
 
 //function to save selected weapon
-let savedWeapon = [];
+let savedWeapon = new Array(5);
 document.getElementById("balance").innerText = "Balance: " + balance;
 function saveWeapon(category, weapon) {
     let balanceDiv = document.getElementById("balance");
     switch (category) {
         case 'Pistols':
-            if (weapon !== null) {
-                pistolsArray.forEach((item) => {
-                    if (item.weaponId === weapon) {
-                        savedWeapon[0] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
-                        console.log(balance);
+            pistolsArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[0] === undefined){
+                    savedWeapon[0] = item;
+                    balance = balance - savedWeapon[0].weaponPrice;
+                    balanceDiv.innerText = "Balance: $" + balance;
+                    console.log(savedWeapon[2]);
+                    console.log(balance);
                     }
-                });
-                console.log(savedWeapon[0]);
-            } else {
-                balance += savedWeapon[0].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[0] = null;
-                console.log(savedWeapon)
-                 console.log(balance);
-            }
+                    else{
+                        balance = balance + savedWeapon[0].weaponPrice;
+                        savedWeapon[0] = item;
+                        balance = balance - savedWeapon[0].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
+                        console.log(balance)
+                    }
+                }
+            });
+            console.log(savedWeapon[0]);
             break;
         case 'Rifles':
-            if(weapon !== null){
-                riflesArray.forEach((item)=>{
-                    if(item.weaponId === weapon){
-                        savedWeapon[1] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
-                        console.log(savedWeapon)
-                    }
-                });
-            } else {
-                balance += savedWeapon[0].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[1] = null;
-                console.log(savedWeapon)
+            riflesArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[1] === undefined){
+                    savedWeapon[1] = item;
+                    balance = balance - savedWeapon[1].weaponPrice;
+                    balanceDiv.innerText = "Balance: $" + balance;
+                    console.log(savedWeapon)
+                }else{
+                    balance = balance + savedWeapon[1].weaponPrice;
+                    savedWeapon[1] = item;
+                    balance = balance - savedWeapon[1].weaponPrice;
+                    balanceDiv.innerText = "Balance: $" + balance;
+                }
             }
+            });
             break;
         case 'Heavy':
-            if(weapon !== null){
-                heavyArray.forEach((item)=>{
-                    if(item.weaponId === weapon){
+            heavyArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[2] === undefined){
                         savedWeapon[2] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
+                        balance = balance - savedWeapon[2].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                         console.log(savedWeapon)
+                    }else{
+                        balance = balance + savedWeapon[2].weaponPrice;
+                        savedWeapon[2] = item;
+                        balance = balance - savedWeapon[2].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                     }
-                });
-            } else {
-                balance += savedWeapon[2].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[2] = null;
-                console.log(savedWeapon)
-            }
+                }
+            });
             break;
         case 'SMGs':
-            if(weapon !== null){
-                smgArray.forEach((item)=>{
-                    if(item.weaponId === weapon){
+            smgArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[3] === undefined){
                         savedWeapon[3] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
+                        balance = balance - savedWeapon[3].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                         console.log(savedWeapon)
+                    }else{
+                        balance = balance + savedWeapon[3].weaponPrice;
+                        savedWeapon[3] = item;
+                        balance = balance - savedWeapon[3].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                     }
-                });
-            } else {
-                balance += savedWeapon[3].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[3] = null;
-                console.log(savedWeapon)
-            }
+                }
+            });
             break;
         case 'Knives':
-            if(weapon !== null){
-                knivesArray.forEach((item)=>{
-                    if(item.weaponId === weapon){
+            knivesArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[4] === undefined){
                         savedWeapon[4] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
+                        balance = balance - savedWeapon[4].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                         console.log(savedWeapon)
+                    }else{
+                        balance = balance + savedWeapon[4].weaponPrice;
+                        savedWeapon[4] = item;
+                        balance = balance - savedWeapon[4].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                     }
-                });
-            } else {
-                balance += savedWeapon[4].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[4] = null;
-                console.log(savedWeapon)
-            }
+                }
+            });
             break;
         case 'Gloves':
-            if(weapon !== null){
-                glovesArray.forEach((item)=>{
-                    if(item.weaponId === weapon){
+            glovesArray.forEach((item) => {
+                if (item.weaponId === weapon) {
+                    if(savedWeapon[5] === undefined){
                         savedWeapon[5] = item;
-                        balance -= item.weaponPrice;
-                        balanceDiv.innerText = "Balance: " + balance;
+                        balance = balance - savedWeapon[5].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                         console.log(savedWeapon)
+                    }else{
+                        balance = balance + savedWeapon[5].weaponPrice;
+                        savedWeapon[5] = item;
+                        balance = balance - savedWeapon[5].weaponPrice;
+                        balanceDiv.innerText = "Balance: $" + balance;
                     }
-                });
-            } else {
-                balance += savedWeapon[5].weaponPrice;
-                balanceDiv.innerText = "Balance: " + balance;
-                savedWeapon[5] = null;
-                console.log(savedWeapon)
-            }
+                }
+            });
             break;
     }
 }
