@@ -1,0 +1,56 @@
+@font-face {
+    font-family: "csgo";
+    src: url("../assets/fonts/cs_regular.ttf");
+}
+body{
+    font-family: "csgo";
+    padding: 0;
+    margin: 0;
+    background-image: url("../assets/images/csgo-weapon-select.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: azure;
+}
+#mainContainer{
+    height: 100dvh;
+    width: 100dvw;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto;
+}
+.character{
+    width: 40%;
+    height: 40%;
+    text-align: center;
+    padding-top: .2em;
+    box-sizing: border-box;
+}
+.weapons{
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto auto;
+    grid-area: 1em;
+}
+.weapon-boxes{
+    height: 4em;
+    width: 50%;
+    background-color: rgba(244, 244, 244, .5);
+    margin: 1em 1em 1em 0em;
+}
+.team-member{
+    border: 1px solid #fff;
+    padding: 1em;
+}
+.character-image{
+    height: 5em;
+    width: 7em;
+}
+.weapon-image{
+    height: 4em;
+    width: 5em;
+}
+.character-name{
+    font-size: 1.5em;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

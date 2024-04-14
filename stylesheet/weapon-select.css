@@ -127,3 +127,11 @@ body{
     margin-top: 0;
     font-family: "Oswald";
 }
+#errorMessage{
+    padding: 0;
+    margin: 0;
+    background-color: #000;
+    color: red;
+    font-size: 1em;
+    text-align: center;
+}

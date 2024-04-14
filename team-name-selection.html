@@ -10,7 +10,8 @@
 </head>
 
 <body onload="displayPlayerLoadout()">
-    <div class="user-name" id="userName">USER NAME</div>
+    <div class="user-name" id="userName">USER NAME</div> 
+    <p id="errorMessage"></p>
     <div id="container" class="container">    
         <div id="leftContainer" class="left-container">
             <div class="left-weapon-set">
@@ -26,8 +27,16 @@
             </div>
         </div>
         <div id="rightContainer" class="right-container">
-            <div id="detailsBox" class="details-box"></div>
-            <div id="teamDetails" class="team-details"></div>
+            <div id="detailsBox" class="details-box">
+                <p id="weaponCategory" class="details"></p>
+                <p id="weaponSkinName" class="details"></p>
+                <p id="weaponName" class="details"></p>
+                <p id="weaponPrice" class="details"></p>
+            </div>
+            <div id="teamDetails" class="team-details">
+                <p>Team Name:</p> <input type="text" name="team-name" id="teamNameinput" placeholder="Team Name">
+                <button id="createTeam" onclick="validateTeamName()">Create Team</button>
+            </div>
         </div>
     </div>
     <!-- scripts -->

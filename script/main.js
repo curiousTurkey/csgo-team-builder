@@ -1,11 +1,11 @@
 //api links
 const AGENT_URL = "https://bymykel.github.io/CSGO-API/api/en/agents.json";
 const WEAPONS_URL = "https://bymykel.github.io/CSGO-API/api/en/skins.json";
-
+const RANDOM_NAME_URL = "https://randomuser.me//api?results=20";
 //array to store api data
 let balance = 9000;
 let agentArray = [];
-// let weaponsArray = [];
+let namesArray = [];
 let pistolsArray = [];
 let riflesArray = [];
 let heavyArray = [];
@@ -25,6 +25,12 @@ function apiFetch(url, callbackfunction) {
 apiFetch(AGENT_URL, (response) => {
     agentArray = JSON.parse(response);
     console.log(agentArray); //for debugging purpose
+});
+apiFetch(RANDOM_NAME_URL, (response) => {
+    let randomNamesArray = JSON.parse(response);
+    for(i = 0; i<randomNamesArray.results.length; i++){
+    namesArray.push(randomNamesArray.results[i].name.first + " " + randomNamesArray.results[i].name.last);
+    }
 });
 //function to get random number
 function getRandomNumber(min, max) {
@@ -307,9 +313,13 @@ function getCategory(weaponTypeArray) {
     return uniqueArray;
 }
 //function to display weapon categories
+function onloadWeaponSelection(){
+    let selectedTeam = localStorage.getItem("selected-team");
+    document.getElementById("heading").innerText = `Choose Weapons: ${selectedTeam}`;
+}
 function insertWeaponCategories(weaponTypeArray, weaponCategory) {
     let categoryContainer = document.getElementById("weaponClass");
-    let selectedTeam = localStorage.getItem("selected-team");
+
     categoryContainer.innerHTML = "";
     let uniqueArray = getCategory(weaponTypeArray);
     for (let i = 0; i < uniqueArray.length; i++) {
@@ -354,7 +364,7 @@ function displayWeapons(weaponTypeArray, weaponCategory, weaponSkinName) {
             weaponCost.innerText = "" + weaponTypeArray[i].weaponPrice;
             weaponTile.appendChild(weaponCost);
             let hiddenSpan = document.createElement("span");
-            hiddenSpan.style.visibility = "hidden";
+            hiddenSpan.style.opacity = "0";
             hiddenSpan.innerText = weaponTypeArray[i].weaponId;
             weaponTile.appendChild(hiddenSpan);
             weaponContainer.appendChild(weaponTile);
@@ -516,20 +526,21 @@ function saveWeapon(category, weapon) {
 }
 //function to validate weapon selection
 function validateWeaponSelection(){
+    let errorElement = document.getElementById("errorMessage");
     if(savedWeapon[0] === undefined){
-        console.log("select a pistol to continue");
+        errorElement.innerText = "select a pistol to continue!";
     } else if(savedWeapon[1] === undefined){
-        console.log("select a Rifle to continue");
+        errorElement.innerText = "select a Rifle to continue!"
     } else if(savedWeapon[2] === undefined){
-        console.log("select a Heavy weapon to continue");
+       errorElement.innerText = "select a Heavy weapon to continue!";
     } else if(savedWeapon[3] === undefined){
-        console.log("select an SMG to continue");
+        errorElement.innerText = "select an SMG to continue!";
     } else if(savedWeapon[4] === undefined){
-        console.log("select a Knife to continue")
+       errorElement.innerText = "select a Knife to continue!";
     } else if(savedWeapon[5] === undefined){
-        console.log("select a glove to continue");
+       errorElement.innerText = "select a glove to continue!";
     } else if(balance < 0){
-        console.log("Can't proceed , choose a new loadout within $9000");
+        errorElement.innerText = "Can't proceed , choose a new loadout within $9000!";
     } else{
         localStorage.setItem("user-info",JSON.stringify(savedWeapon));
         console.log("Succedded");
@@ -546,11 +557,141 @@ function displayPlayerLoadout(){
     let selectedTeam = localStorage.getItem("selected-team");
     console.log(selectedTeam);
     let selectedAgentImage = localStorage.getItem("selected-agent-image");
-    console.log(selectedAgentImage);
     document.getElementById("userName").innerText = username;
     document.querySelector(".character-image").style = `background-image: url(${selectedAgentImage})`;
     for(let i = 0; i<6; i++){
         document.querySelectorAll(".weapon-image img")[i].src = userWeaponInfo[i].weaponImage;
+        document.querySelectorAll(".weapon-image")[i].id = userWeaponInfo[i].weaponId;
     }
-
+    let weaponContainer = document.querySelectorAll(".weapon-image");
+    weaponContainer.forEach((item)=>{
+        item.addEventListener("mouseenter",()=>{
+        let containerID = item.getAttribute("id");
+        for(let i=0;i<6;i++){
+            if(containerID === userWeaponInfo[i].weaponId){
+                let weaponName = userWeaponInfo[i].weaponSkinName;
+                let weaponSkin = userWeaponInfo[i].patternName;
+                let weaponCategory = userWeaponInfo[i].categoryName;
+                let weaponPrice = userWeaponInfo[i].weaponPrice;
+                document.getElementById("detailsBox").style.opacity = "1";
+                document.getElementById("weaponCategory").innerText = `Weapon Category:\n${weaponCategory}`;
+                document.getElementById("weaponSkinName").innerText = `Weapon Skin Pattern:\n${weaponSkin}`;
+                document.getElementById("weaponName").innerText = `Weapon Name:\n${weaponName}`;
+                document.getElementById("weaponPrice").innerText = `Weapon Price:\n$${weaponPrice}`;
+            }
+        }
+        })
+    });
+    weaponContainer.forEach((item)=>{
+        item.addEventListener("mouseleave",()=>{           
+            document.getElementById("detailsBox").style.opacity = "0";
+            document.getElementById("weaponCategory").innerText = ``;
+                document.getElementById("weaponSkinName").innerText = ``;
+                document.getElementById("weaponName").innerText = ``;
+                document.getElementById("weaponPrice").innerText = ``;
+        })
+    })
 }
+function validateTeamName(){
+    let inputTextName = document.getElementById("teamNameinput").value.trim();
+    let regex = /^[a-zA-Z]+$/;
+    var singleWordRegex = /^\w+$/;
+    let isValid = regex.test(inputTextName);
+    let isValidWord = singleWordRegex.test(inputTextName);
+    console.log(isValidWord)
+    console.log(isValid);
+    let errorElement = document.getElementById("errorMessage");
+    if(inputTextName === undefined || inputTextName === ""){
+    errorElement.innerText = "Assign team name!"
+    return;
+    }
+    if(isValid === false)
+    errorElement.innerText = "Only alphabets are supported! No other characters!";
+    else if(isValidWord === false)
+    errorElement.innerText = "No more than one word is permitted!";
+    else
+    window.location.href = "../final-screen.html";
+}
+//function to display final team
+let userTeamAgents = [];
+let teamMembers = [];
+function displayTeam(){
+    let selectedTeam = localStorage.getItem("selected-team");
+    let selectedAgent = localStorage.getItem("selected-agent");
+    console.log(selectedAgent);
+    for(let i = 0; i < agentArray.length; i++){
+        if(agentArray[i].team.id === selectedTeam){
+            if(agentArray[i].name === selectedAgent){
+                localStorage.setItem("user-selected-agent",JSON.stringify(agentArray[i]));
+            }
+            else{
+                userTeamAgents.push(agentArray[i]);
+            }
+        }
+    }
+    let userSelectedAgent = JSON.parse(localStorage.getItem("user-selected-agent"));
+    max = userTeamAgents.length;
+    teamMembers.push(userSelectedAgent);
+    console.log(teamMembers.length);
+    while(teamMembers.length < 4){
+        let random = getRandom(max);
+        console.log("in while");
+        console.log(random);
+        teamMembers.push(userTeamAgents[random]);
+    }
+    console.log(userTeamAgents);
+    console.log(teamMembers);
+    addAgentsDetails(teamMembers,4);
+}
+//get random number for agent Selection
+function getRandom(max){
+    let min = 0;
+    let randomNumber = Math.round(Math.random() * (max - min) + min);
+    return randomNumber;
+}
+//function to append agent details
+//line 553
+function addAgentsDetails(teamMembers,length){
+    let userName = localStorage.getItem("username");
+    let userWeaponLoadout = JSON.parse(localStorage.getItem("user-info"));
+    console.log("yy")
+    console.log(teamMembers);
+    console.log(userWeaponLoadout)
+    document.getElementsByClassName("character-name")[0].innerText = userName;
+    document.getElementsByClassName("character-image")[0].src = teamMembers[0].image;
+    for(let i=0;i<6;i++){
+    document.getElementsByClassName("weapon-image")[i].src = userWeaponLoadout[i].weaponImage;
+    }
+    for(let i = 1; i<length; i++){
+    let characters = document.getElementsByClassName("character-name");
+    let randomUserName = getRandom(namesArray.length);
+    characters[i].innerText = namesArray[randomUserName];
+        for(let j = 0; j<6; j++){
+            let weaponsImage = document.querySelectorAll(".weapon-boxes img");
+            weaponsImage[j].setAttribute("src",userWeaponLoadout[j].weaponImage);
+        }
+    }
+    console.log("tt")
+    console.log(teamMembers)
+    for(let i = 1; i<4; i++){
+        let characterImages = document.querySelectorAll(".character img");
+        characterImages[i].src = teamMembers[i].image;
+    }
+    for(let i = 6; i<24; i++){
+        let weaponsImage = document.querySelectorAll(".weapon-boxes img");
+        if(i === 6 || i === 12 || i === 18){
+            weaponsImage[i].setAttribute("src",pistolsArray[Math.floor(Math.random() * 15)].weaponImage);
+        }else if(i === 7 || i === 13 || i === 19){
+            weaponsImage[i].setAttribute("src", riflesArray[Math.floor(Math.random() * 15)].weaponImage);
+        }else if(i === 8 || i === 14 || i === 20){
+            weaponsImage[i].setAttribute("src", heavyArray[Math.floor(Math.random() * 15)].weaponImage);
+        }else if(i === 9 || i === 15 || i === 21){
+            weaponsImage[i].setAttribute("src", smgArray[Math.floor(Math.random() * 15)].weaponImage);
+        }else if(i === 10 || i === 16 || i === 22){
+            weaponsImage[i].setAttribute("src", knivesArray[Math.floor(Math.random() * 15)].weaponImage);
+        }else if(i === 11 || i === 17 || i === 23){
+            weaponsImage[i].setAttribute("src", glovesArray[Math.floor(Math.random() * 15)].weaponImage);
+        }
+    }
+}
+//loadout selector
