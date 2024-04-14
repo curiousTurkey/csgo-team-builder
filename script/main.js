@@ -169,6 +169,8 @@ function agentSelect(classname) {
                 }
                 agents[i].classList.add("active");
                 isActive = true;
+                let selectedAgentImage = document.querySelector(".active img").src;
+                localStorage.setItem("selected-agent-image",selectedAgentImage);
                 let selectedAgent = agents[i].innerText;
                 localStorage.setItem('selected-agent', selectedAgent);
             } else if (isActive == true) {
@@ -176,6 +178,8 @@ function agentSelect(classname) {
                     agents[j].classList.remove("active");
                 }
                 agents[i].classList.add("active");
+                let selectedAgentImage = document.querySelector(".active img").src;
+                localStorage.setItem("selected-agent-image",selectedAgentImage);
                 let selectedAgent = agents[i].innerText;
                 localStorage.setItem('selected-agent', selectedAgent);
             }
@@ -395,7 +399,10 @@ function setWeaponActive(weaponCategory) {
 
 //function to save selected weapon
 let savedWeapon = new Array(5);
-document.getElementById("balance").innerText = "Balance: $" + balance;
+let balanceContainer = document.getElementById("balance");
+if(balanceContainer){
+    balanceContainer.innerText = "Balance: $" + balance;
+}
 function saveWeapon(category, weapon) {
     let balanceDiv = document.getElementById("balance");
     switch (category) {
@@ -523,5 +530,27 @@ function validateWeaponSelection(){
         console.log("select a glove to continue");
     } else if(balance < 0){
         console.log("Can't proceed , choose a new loadout within $9000");
+    } else{
+        localStorage.setItem("user-info",JSON.stringify(savedWeapon));
+        console.log("Succedded");
+        window.location.href = "team-name-selection.html";
     }
+}
+function displayPlayerLoadout(){
+    let userWeaponInfo = JSON.parse(localStorage.getItem('user-info'));
+    console.log(userWeaponInfo);
+    let username = localStorage.getItem("username");
+    console.log(username);
+    let selectedAgent = localStorage.getItem("selected-agent");
+    console.log(selectedAgent);
+    let selectedTeam = localStorage.getItem("selected-team");
+    console.log(selectedTeam);
+    let selectedAgentImage = localStorage.getItem("selected-agent-image");
+    console.log(selectedAgentImage);
+    document.getElementById("userName").innerText = username;
+    document.querySelector(".character-image").style = `background-image: url(${selectedAgentImage})`;
+    for(let i = 0; i<6; i++){
+        document.querySelectorAll(".weapon-image img")[i].src = userWeaponInfo[i].weaponImage;
+    }
+
 }
