@@ -610,7 +610,7 @@ function validateTeamName(){
     else if(isValidWord === false)
     errorElement.innerText = "No more than one word is permitted!";
     else
-    window.location.href = "../final-screen.html";
+    window.location.href = "final-screen.html";
 }
 //function to display final team
 let userTeamAgents = [];
